@@ -1,10 +1,13 @@
-import { Avatar, makeStyles, Tooltip, Typography } from "@material-ui/core";
+import { useEffect, useRef } from "react";
+import { makeStyles, Tooltip, Typography } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import MenuIcon from "@material-ui/icons/Menu";
 import ShuffleIcon from "@material-ui/icons/Shuffle";
 import LowPriorityIcon from "@material-ui/icons/LowPriority";
 import SearchIcon from "@material-ui/icons/Search";
-import { useEffect, useRef } from "react";
+import ScheduleIcon from "@material-ui/icons/Schedule";
+import SortByAlphaIcon from "@material-ui/icons/SortByAlpha";
+import SortIcon from "@material-ui/icons/Sort";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -99,10 +102,32 @@ const useStyles = makeStyles((theme) => ({
     right: 0,
     zIndex: 2,
 
-    "&.open > div": {
+    "& .sort": {
+      background: theme.palette.secondary.main,
+    },
+
+    "&.open .searchTool": {
       right: "0rem",
-      bottom: "8rem",
+      bottom: "7.7rem",
       transitionDelay: "0.3s",
+    },
+
+    "&.open .sort:nth-of-type(2)": {
+      right: "0rem",
+      bottom: "10.8rem",
+      transitionDelay: "0.35s",
+    },
+
+    "&.open .sort:nth-of-type(3)": {
+      right: "0rem",
+      bottom: "13.9rem",
+      transitionDelay: "0.4s",
+    },
+
+    "&.open .sort:nth-of-type(4)": {
+      right: "0rem",
+      bottom: "17rem",
+      transitionDelay: "0.45s",
     },
   },
 
@@ -248,11 +273,31 @@ const Tools = ({ setIsOpenCreateTopic }) => {
       </div>
 
       <div className={classes.menuLine} ref={menuLine}>
-        <div className={classes.searchField} ref={searchField}>
+        <div className={`${classes.searchField} searchTool`} ref={searchField}>
           <input type="text" placeholder="nhập từ khóa" />
           <div className={`${classes.searchIcon} icon`} onClick={openField}>
-            <SearchIcon />
+            <Tooltip title="Tìm kiếm">
+              <SearchIcon />
+            </Tooltip>
           </div>
+        </div>
+
+        <div className={`${classes.btnApp} sort`}>
+          <Tooltip title="Sắp xếp theo ký tự">
+            <SortByAlphaIcon />
+          </Tooltip>
+        </div>
+
+        <div className={`${classes.btnApp} sort`}>
+          <Tooltip title="Sắp xếp theo thời gian tạo">
+            <ScheduleIcon />
+          </Tooltip>
+        </div>
+
+        <div className={`${classes.btnApp} sort`}>
+          <Tooltip title="Sắp xếp theo số lượng từ">
+            <SortIcon />
+          </Tooltip>
         </div>
       </div>
     </div>

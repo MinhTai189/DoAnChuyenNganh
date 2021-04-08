@@ -4,6 +4,7 @@ import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import { selectStatus } from './features/darkmode/DarkModeSlice'
+import SigninPage from './pages/SigninPage';
 
 function App() {
   const isDarkMode = useSelector(selectStatus)
@@ -22,7 +23,8 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <HomePage />
+      {/* <HomePage /> */}
+      <SigninPage />
     </ThemeProvider>
   );
 }

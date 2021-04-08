@@ -1,6 +1,5 @@
 import { makeStyles } from "@material-ui/styles";
 import { useState } from "react";
-import Chart from "../components/Chart";
 import CreateTopic from "../components/CreateTopic";
 import Nav from "../components/Nav";
 import Tools from "../components/Tools";
