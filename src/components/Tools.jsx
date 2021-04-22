@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { makeStyles, Tooltip, Typography } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -8,6 +8,8 @@ import SearchIcon from "@material-ui/icons/Search";
 import ScheduleIcon from "@material-ui/icons/Schedule";
 import SortByAlphaIcon from "@material-ui/icons/SortByAlpha";
 import SortIcon from "@material-ui/icons/Sort";
+import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
+import HourglassEmptyIcon from "@material-ui/icons/HourglassEmpty";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     display: "grid",
     placeItems: "center",
-    background: theme.palette.primary.main,
+    background: "linear-gradient(45deg, #8fb339 ,  #a8e063 )",
     zIndex: 5,
     right: 0,
     bottom: 0,
@@ -81,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
     bottom: "0.5em",
     right: "0.5em",
     transition: "0.4s",
-    background: theme.palette.primary.main,
+    background: "linear-gradient(45deg, #8fb339 ,  #a8e063 )",
     borderRadius: "50%",
     boxShadow: "2px 2px 1px 1px rgba(0, 0, 0, 0.2)",
     cursor: "pointer",
@@ -103,7 +105,7 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 2,
 
     "& .sort": {
-      background: theme.palette.secondary.main,
+      background: "linear-gradient(45deg, #2193b0, #6dd5ed)",
     },
 
     "&.open .searchTool": {
@@ -129,6 +131,11 @@ const useStyles = makeStyles((theme) => ({
       bottom: "17rem",
       transitionDelay: "0.45s",
     },
+    "&.open span": {
+      opacity: 1,
+      transition: "opacity .5s",
+      transitionDelay: ".5s",
+    },
   },
 
   searchField: {
@@ -145,7 +152,7 @@ const useStyles = makeStyles((theme) => ({
       width: 0,
       padding: 0,
       color: "#777",
-      background: `${theme.palette.secondary.main}a9`,
+      background: "#6dd5ed",
       fontSize: 13,
       fontWeight: 600,
       borderRadius: 100,
@@ -156,7 +163,7 @@ const useStyles = makeStyles((theme) => ({
     },
 
     "&.open input": {
-      border: `2px solid ${theme.palette.secondary.main}`,
+      border: `2px solid #6dd5ed`,
       width: 200,
       padding: "2px 30px 2px 15px",
       transition: ".4s ease-out",
@@ -174,7 +181,7 @@ const useStyles = makeStyles((theme) => ({
     placeItems: "center",
     width: 40,
     height: 40,
-    background: theme.palette.secondary.main,
+    background: "linear-gradient(45deg, #2193b0, #6dd5ed)",
     borderRadius: "50%",
     boxShadow: "2px 2px 1px 1px rgba(0, 0, 0, 0.2)",
     cursor: "pointer",
@@ -189,11 +196,30 @@ const useStyles = makeStyles((theme) => ({
       transform: "scale(1.08)",
     },
   },
+  order: {
+    position: "absolute",
+    opacity: 0,
+
+    "& .MuiSvgIcon-root": {
+      fill: theme.palette.text.primary,
+    },
+  },
 }));
 
-const Tools = ({ setIsOpenCreateTopic }) => {
+const Tools = (props) => {
+  const {
+    setIsOpen,
+    dataFinding,
+    setDataFinding,
+    setValueSort,
+    isVocab = false,
+    handleTest,
+    isTopic = false,
+  } = props;
   const classes = useStyles();
   const menuToggle = useRef();
+  const [order, setOrder] = useState(null);
+
   const menuRound = useRef();
   const menuLine = useRef();
   const searchField = useRef();
@@ -214,14 +240,27 @@ const Tools = ({ setIsOpenCreateTopic }) => {
   };
 
   // Mở trường tìm kiếm
-
   const openField = () => {
     searchField.current.classList.toggle("open");
+  };
+
+  const handleOrder = (order) => {
+    setOrder((old) => {
+      if (old === null) return { order, column: "asc" };
+      if (old.order === order) {
+        if (old.column === "asc") return { ...old, column: "des" };
+        return null;
+      } else return { order, column: "asc" };
+    });
   };
 
   useEffect(() => {
     return clearTimeout(timeout);
   }, []);
+
+  useEffect(() => {
+    setValueSort(order);
+  }, [order]);
 
   return (
     <div className={classes.root}>
@@ -229,12 +268,16 @@ const Tools = ({ setIsOpenCreateTopic }) => {
         <MenuIcon />
       </div>
       <div className={classes.menuRound} ref={menuRound}>
-        <div className={classes.btnApp}>
+        <div className={classes.btnApp} onClick={() => handleTest("type1")}>
           <Tooltip
             title={
               <>
                 <Typography>Kiểm tra từ vựng</Typography>
-                <p>Kiểm tra tất cả từng vựng theo từng chủ đề</p>
+                <p>
+                  {isTopic
+                    ? "Kiểm tra tất cả theo mức độ hay quên"
+                    : "Kiểm tra tất cả từng vựng"}
+                </p>
               </>
             }
           >
@@ -242,7 +285,7 @@ const Tools = ({ setIsOpenCreateTopic }) => {
           </Tooltip>
         </div>
 
-        <div className={classes.btnApp}>
+        <div className={classes.btnApp} onClick={() => handleTest("type2")}>
           <Tooltip
             title={
               <>
@@ -255,10 +298,7 @@ const Tools = ({ setIsOpenCreateTopic }) => {
           </Tooltip>
         </div>
 
-        <div
-          className={classes.btnApp}
-          onClick={() => setIsOpenCreateTopic(true)}
-        >
+        <div className={classes.btnApp} onClick={() => setIsOpen(true)}>
           <Tooltip
             title={
               <>
@@ -274,7 +314,12 @@ const Tools = ({ setIsOpenCreateTopic }) => {
 
       <div className={classes.menuLine} ref={menuLine}>
         <div className={`${classes.searchField} searchTool`} ref={searchField}>
-          <input type="text" placeholder="nhập từ khóa" />
+          <input
+            type="text"
+            placeholder="nhập từ khóa"
+            value={dataFinding}
+            onChange={(e) => setDataFinding(e.target.value)}
+          />
           <div className={`${classes.searchIcon} icon`} onClick={openField}>
             <Tooltip title="Tìm kiếm">
               <SearchIcon />
@@ -282,22 +327,73 @@ const Tools = ({ setIsOpenCreateTopic }) => {
           </div>
         </div>
 
-        <div className={`${classes.btnApp} sort`}>
+        <div
+          className={`${classes.btnApp} sort`}
+          onClick={() => handleOrder("alphabet")}
+        >
           <Tooltip title="Sắp xếp theo ký tự">
             <SortByAlphaIcon />
           </Tooltip>
+          {order && order.order === "alphabet" && (
+            <span
+              className={classes.order}
+              style={
+                order.column === "asc"
+                  ? { right: 26, top: -7, transform: "rotate(-45deg)" }
+                  : { right: 26, bottom: -7, transform: "rotate(-135deg)" }
+              }
+            >
+              <ArrowDropUpIcon />
+            </span>
+          )}
         </div>
 
-        <div className={`${classes.btnApp} sort`}>
+        <div
+          className={`${classes.btnApp} sort`}
+          onClick={() => handleOrder("date")}
+        >
           <Tooltip title="Sắp xếp theo thời gian tạo">
             <ScheduleIcon />
           </Tooltip>
+          {order && order.order === "date" && (
+            <span
+              className={classes.order}
+              style={
+                order.column === "asc"
+                  ? { right: 26, top: -7, transform: "rotate(-45deg)" }
+                  : { right: 26, bottom: -7, transform: "rotate(-135deg)" }
+              }
+            >
+              <ArrowDropUpIcon />
+            </span>
+          )}
         </div>
 
-        <div className={`${classes.btnApp} sort`}>
-          <Tooltip title="Sắp xếp theo số lượng từ">
-            <SortIcon />
+        <div
+          className={`${classes.btnApp} sort`}
+          onClick={() => handleOrder("quantity")}
+        >
+          <Tooltip
+            title={
+              isVocab
+                ? "Sắp xếp theo mức độ hay quên"
+                : "Sắp xếp theo số lượng từ"
+            }
+          >
+            {isVocab ? <HourglassEmptyIcon /> : <SortIcon />}
           </Tooltip>
+          {order && order.order === "quantity" && (
+            <span
+              className={classes.order}
+              style={
+                order.column === "asc"
+                  ? { right: 26, top: -7, transform: "rotate(-45deg)" }
+                  : { right: 26, bottom: -7, transform: "rotate(-135deg)" }
+              }
+            >
+              <ArrowDropUpIcon />
+            </span>
+          )}
         </div>
       </div>
     </div>

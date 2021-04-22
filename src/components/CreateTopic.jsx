@@ -22,34 +22,49 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CreateTopic = ({ isOpenCreateTopic, setIsOpenCreateTopic }) => {
-  const [title, setTitle] = useState("");
+const CreateTopic = (props) => {
+  const {
+    title,
+    backgroundP,
+    isOpen,
+    setIsOpen,
+    handleCreateTopic,
+    isEdit,
+  } = props;
+  const [topic, setTopic] = useState("");
   const [background, setBackground] = useState("transparent");
 
   const createTopic = () => {
-    if (background == "transparent" || title == "") {
-      setIsOpenCreateTopic(true);
+    if (background === "transparent" || topic === "") {
+      setIsOpen(true);
       alert("Tiêu đề và màu nền là trường bắt buộc!");
     } else {
-      console.log("title: ", title, " background: ", background);
+      handleCreateTopic(topic, background);
       setInitialValue();
     }
   };
 
   const setInitialValue = () => {
-    setTitle("");
-    setBackground("transparent");
+    setTopic(title ? title : "");
+    setBackground(backgroundP ? backgroundP : "transparent");
   };
+
+  useEffect(() => {
+    if (isEdit) {
+      setTopic(title);
+      setBackground(backgroundP);
+    }
+  }, [title, backgroundP]);
 
   return (
     <CustomDialog
-      open={isOpenCreateTopic}
-      close={setIsOpenCreateTopic}
+      open={isOpen}
+      handleClose={setIsOpen}
       title={"Tạo chủ đề"}
       content={
         <CustomDialogContent
-          title={title}
-          setTitle={setTitle}
+          topic={topic}
+          setTopic={setTopic}
           setBackground={setBackground}
         />
       }
@@ -65,11 +80,11 @@ const CreateTopic = ({ isOpenCreateTopic, setIsOpenCreateTopic }) => {
 export default CreateTopic;
 
 // tạo phần nội dung của component CustomDialog
-const CustomDialogContent = ({ title, setTitle, setBackground }) => {
+const CustomDialogContent = ({ topic, setTopic, setBackground }) => {
   const classes = useStyles();
 
   const onChange = (e) => {
-    setTitle(e.target.value);
+    setTopic(e.target.value);
   };
 
   return (
@@ -80,7 +95,7 @@ const CustomDialogContent = ({ title, setTitle, setBackground }) => {
           className={classes.textField}
           variant="outlined"
           fullWidth
-          value={title}
+          value={topic}
           onChange={onChange}
         />
       </div>

@@ -1,4 +1,11 @@
-import { Button, Fab, Grid, Tooltip, Typography } from "@material-ui/core";
+import {
+  Avatar,
+  Button,
+  Fab,
+  Grid,
+  Tooltip,
+  Typography,
+} from "@material-ui/core";
 import { makeStyles, withStyles } from "@material-ui/styles";
 import EmailSharpIcon from "@material-ui/icons/EmailSharp";
 import StarSharpIcon from "@material-ui/icons/StarSharp";
@@ -7,7 +14,10 @@ import ViewListSharpIcon from "@material-ui/icons/ViewListSharp";
 import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
 import Chart from "./Chart";
 import { useEffect, useRef, useState } from "react";
-
+import { firebaseAuth } from "../firebase";
+import { useSelector, useDispatch } from "react-redux";
+import { selectUser, removeUser } from "../features/user/UserSlice";
+import { useHistory } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   root: {
     position: "fixed",
@@ -37,11 +47,11 @@ const useStyles = makeStyles((theme) => ({
     alignSelf: "flex-start",
     paddingRight: theme.spacing(2),
 
-    "& img": {
+    "& .MuiAvatar-root": {
       height: 115,
       width: 115,
-      objectFit: "cover",
       border: `3px solid ${theme.palette.primary.main}`,
+      borderRadius: 0,
 
       [theme.breakpoints.down("xs")]: {
         height: 100,
@@ -158,6 +168,9 @@ const Details = ({ setIsOpenDetail }) => {
   const [widthChart, setWidthChart] = useState();
   const width = useRef();
   const left = useRef();
+  const user = useSelector(selectUser);
+  const history = useHistory();
+  const dispatch = useDispatch();
 
   function handleResize() {
     setWidthChart(width.current?.offsetWidth - left.current?.offsetWidth - 2);
@@ -170,7 +183,12 @@ const Details = ({ setIsOpenDetail }) => {
     return window.removeEventListener("resize", handleResize);
   }, []);
 
-  console.log(widthChart);
+  // xử lý đăng xuất
+  const handleSignout = () => {
+    dispatch(removeUser());
+    firebaseAuth.signOut();
+    history.push("/");
+  };
 
   return (
     <Grid className={classes.root} container>
@@ -178,17 +196,14 @@ const Details = ({ setIsOpenDetail }) => {
       <Grid item xs={12} sm={10} md={6} ref={width}>
         <div className={classes.container}>
           <div className={classes.left} ref={left}>
-            <img
-              src="https://icapi.org/wp-content/uploads/2019/10/anh-dai-dien-facebook-de-thuong-77.jpg"
-              alt="avatar"
-            />
+            <Avatar src={user.avatar} alt="avatar" />
 
-            <Button>Đăng xuất</Button>
+            <Button onClick={() => handleSignout()}>Đăng xuất</Button>
           </div>
 
           <div className={classes.right}>
             <div className={classes.header}>
-              <Typography variant="h6">Chào Tài Trần!</Typography>
+              <Typography variant="h6">{`Chào ${user.name}!`}</Typography>
               <Typography component="p">
                 Hãy xem một số thống kê của bạn
               </Typography>
@@ -198,9 +213,7 @@ const Details = ({ setIsOpenDetail }) => {
               <LightTooltip title="Email của bạn" placement="left">
                 <div className={classes.row}>
                   <EmailSharpIcon />
-                  <Typography component="span">
-                    tranminhtai189@gmail.com
-                  </Typography>
+                  <Typography component="span">{user.email}</Typography>
                 </div>
               </LightTooltip>
               <br />
@@ -208,7 +221,7 @@ const Details = ({ setIsOpenDetail }) => {
               <LightTooltip title="Tổng số sao" placement="left">
                 <div className={classes.row}>
                   <StarSharpIcon />
-                  <Typography component="span">1200</Typography>
+                  <Typography component="span">{user.data.score}</Typography>
                 </div>
               </LightTooltip>
               <br />
@@ -216,7 +229,9 @@ const Details = ({ setIsOpenDetail }) => {
               <LightTooltip title="Tổng số chủ đề" placement="left">
                 <div className={classes.row}>
                   <ViewListSharpIcon />
-                  <Typography component="span">20</Typography>
+                  <Typography component="span">
+                    {user.data.countTopic}
+                  </Typography>
                 </div>
               </LightTooltip>
               <br />
@@ -224,7 +239,9 @@ const Details = ({ setIsOpenDetail }) => {
               <LightTooltip title="Tổng số từ vựng" placement="left">
                 <div className={classes.row}>
                   <TranslateSharpIcon />
-                  <Typography component="span">100</Typography>
+                  <Typography component="span">
+                    {user.data.countVocab}
+                  </Typography>
                 </div>
               </LightTooltip>
 
@@ -232,7 +249,11 @@ const Details = ({ setIsOpenDetail }) => {
                 <Typography component="p">
                   Bảng thống kê số giờ học trong tuần
                 </Typography>
-                <Chart width={widthChart} height={widthChart / 2} />
+                <Chart
+                  width={widthChart}
+                  height={widthChart / 2}
+                  data={user.data.onlinedTime}
+                />
               </div>
             </div>
           </div>

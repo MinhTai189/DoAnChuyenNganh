@@ -2,11 +2,13 @@ import { makeStyles, Typography } from "@material-ui/core";
 import AcUnitIcon from "@material-ui/icons/AcUnit";
 import ggLogo from "../images/gg-logo.svg";
 import fbLogo from "../images/fb-logo.svg";
+import { firebaseAuth, providerFB, providerGG } from "../firebase";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "grid",
     placeItems: "center",
+    padding: "0 5px",
     height: "100vh",
     width: "100vw",
     background:
@@ -43,6 +45,11 @@ const useStyles = makeStyles((theme) => ({
     )}px`,
     background: "#ffffff49",
     boxShadow: theme.shadows[20],
+    [theme.breakpoints.down(375)]: {
+      padding: `${theme.spacing(1.5)}px ${theme.spacing(1.5)}px ${theme.spacing(
+        5
+      )}px`,
+    },
   },
   flex: {
     display: "flex",
@@ -121,6 +128,30 @@ const useStyles = makeStyles((theme) => ({
 const SigninPage = () => {
   const classes = useStyles();
 
+  const signinWithGG = () => {
+    firebaseAuth
+      .signInWithPopup(providerGG)
+      .then((result) => {})
+      .catch((error) => {
+        alert("Đăng nhập bằng Google không thành công!\n" + error);
+      });
+  };
+
+  const signinWithFB = () => {
+    firebaseAuth
+      .signInWithPopup(providerFB)
+      .then((result) => {})
+      .catch((error) => {
+        if (error.credential) {
+          alert(
+            "Email của bạn đã đăng nhập bằng Google. Hãy dùng tài khoản Google của bạn để đăng nhập!"
+          );
+        } else {
+          alert("Đăng nhập bằng Facebook không thành công!\n" + error);
+        }
+      });
+  };
+
   return (
     <div className={classes.root}>
       <div className={classes.container}>
@@ -133,14 +164,22 @@ const SigninPage = () => {
 
           <Typography variant="h6">Đăng nhập</Typography>
 
-          <div className={classes.button} style={{ background: "#DB4437" }}>
+          <div
+            className={classes.button}
+            style={{ background: "#DB4437" }}
+            onClick={() => signinWithGG()}
+          >
             <img src={ggLogo} alt="Google Logo" />
             <span className="gg">Google</span>
           </div>
 
           <Typography variant="h6">hoặc</Typography>
 
-          <div className={classes.button} style={{ background: "#4267B2" }}>
+          <div
+            className={classes.button}
+            style={{ background: "#4267B2" }}
+            onClick={() => signinWithFB()}
+          >
             <img src={fbLogo} alt="Facebook Logo" />
             <span className="fb">Facebook</span>
           </div>

@@ -22,7 +22,7 @@ const useStyles = makeStyles({
 const CustomDialog = (props) => {
   const {
     open,
-    close,
+    handleClose,
     title,
     content,
     cancel,
@@ -30,6 +30,7 @@ const CustomDialog = (props) => {
     colorTitle = "transparent",
     eventAgree,
     eventCancel,
+    isMutiple = false,
   } = props;
   const classes = useStyles();
 
@@ -38,7 +39,7 @@ const CustomDialog = (props) => {
       className={classes.root}
       open={open}
       onClose={() => {
-        close(false);
+        handleClose(false);
         eventCancel();
       }}
       aria-labelledby="alert-dialog-title"
@@ -55,7 +56,7 @@ const CustomDialog = (props) => {
         {cancel && (
           <Button
             onClick={() => {
-              close(false);
+              handleClose(false);
               eventCancel();
             }}
             color="primary"
@@ -65,7 +66,7 @@ const CustomDialog = (props) => {
         )}
         <Button
           onClick={() => {
-            close(false);
+            handleClose(isMutiple);
             eventAgree();
           }}
           color="primary"

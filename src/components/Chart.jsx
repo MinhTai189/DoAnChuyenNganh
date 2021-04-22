@@ -8,19 +8,21 @@ import {
   Tooltip,
 } from "recharts";
 
-const Chart = ({ width, height }) => {
+const Chart = ({ width, height, data }) => {
   const [dataChart, setDataChart] = useState([]);
 
   useEffect(() => {
-    setDataChart([
-      { name: "T2", minutes: 65 },
-      { name: "T3", minutes: 10 },
-      { name: "T4", minutes: 0 },
-      { name: "T5", minutes: 130 },
-      { name: "T6", minutes: 100 },
-      { name: "T7", minutes: 3 },
-      { name: "CN", minutes: 161 },
-    ]);
+    // biến đổi mảng đối tượng thành kiểu dữ liệu của chart ({name: value, minutes: value})
+    const temp = data.reduce((arr, cur, index) => {
+      const name = index > 5 ? "CN" : `T${index + 2}`;
+      let minutes = 0;
+
+      if (typeof cur !== "number") minutes = cur.minutes;
+      arr.push({ name, minutes });
+      return arr;
+    }, []);
+
+    setDataChart(temp);
   }, []);
 
   return (

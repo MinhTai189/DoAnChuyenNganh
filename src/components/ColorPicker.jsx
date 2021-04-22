@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { CirclePicker } from "react-color";
 
 const ColorPicker = ({ setBackground }) => {

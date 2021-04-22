@@ -6,8 +6,9 @@ import ArrowDropDownSharpIcon from "@material-ui/icons/ArrowDropDownSharp";
 import SignalCellular4BarIcon from "@material-ui/icons/SignalCellular4Bar";
 import Details from "./Details";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { changeStatus } from "../features/darkmode/DarkModeSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { changeStatus, selectStatus } from "../features/darkmode/DarkModeSlice";
+import { selectUser } from "../features/user/UserSlice";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,7 +17,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-end",
     height: 55,
     padding: `0 ${theme.spacing(2)}px`,
-    background: "#8FB339",
+    background: theme.palette.primary.main,
+    boxShadow: theme.shadows[2],
+    zIndex: 1000,
   },
   items: {
     display: "flex",
@@ -27,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
       top: "-3.5px",
     },
     "& .MuiSwitch-colorSecondary.Mui-checked + .MuiSwitch-track": {
-      backgroundColor: "#efb815",
+      backgroundColor: "#d9cac6",
     },
     "& .MuiSwitch-switchBase.Mui-checked": {
       transform: "translateX(15px)",
@@ -66,6 +69,8 @@ const Nav = () => {
   const classes = useStyles();
   const [isOpenDetail, setIsOpenDetail] = useState(false);
   const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+  const isDarkMode = useSelector(selectStatus);
 
   return (
     <>
@@ -74,15 +79,19 @@ const Nav = () => {
           <Switch
             className={classes.switch}
             icon={<Brightness7RoundedIcon />}
+            checked={isDarkMode}
             checkedIcon={<Brightness4RoundedIcon />}
             size="medium"
             inputProps={{ "aria-label": "secondary checkbox" }}
-            onChange={() => dispatch(changeStatus())}
+            onChange={() => {
+              dispatch(changeStatus());
+              localStorage.setItem("isDarkMode", JSON.stringify(!isDarkMode));
+            }}
           />
 
           <Avatar
             className={classes.avatar}
-            src="https://icapi.org/wp-content/uploads/2019/10/anh-dai-dien-facebook-de-thuong-77.jpg"
+            src={user.avatar}
             alt="Avatar"
             onClick={() => setIsOpenDetail(true)}
           />
