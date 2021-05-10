@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/doanchuyennganh/static/css/main.417ed58f.chunk.css",
+    "main.js": "/doanchuyennganh/static/js/main.dc4f3169.chunk.js",
+    "main.js.map": "/doanchuyennganh/static/js/main.dc4f3169.chunk.js.map",
+    "runtime-main.js": "/doanchuyennganh/static/js/runtime-main.aa95344c.js",
+    "runtime-main.js.map": "/doanchuyennganh/static/js/runtime-main.aa95344c.js.map",
+    "static/js/2.2f8d3b47.chunk.js": "/doanchuyennganh/static/js/2.2f8d3b47.chunk.js",
+    "static/js/2.2f8d3b47.chunk.js.map": "/doanchuyennganh/static/js/2.2f8d3b47.chunk.js.map",
+    "index.html": "/doanchuyennganh/index.html",
+    "static/css/main.417ed58f.chunk.css.map": "/doanchuyennganh/static/css/main.417ed58f.chunk.css.map",
+    "static/js/2.2f8d3b47.chunk.js.LICENSE.txt": "/doanchuyennganh/static/js/2.2f8d3b47.chunk.js.LICENSE.txt",
+    "static/media/fb-logo.6da57fc3.svg": "/doanchuyennganh/static/media/fb-logo.6da57fc3.svg",
+    "static/media/gg-logo.6bcb04c9.svg": "/doanchuyennganh/static/media/gg-logo.6bcb04c9.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.aa95344c.js",
+    "static/js/2.2f8d3b47.chunk.js",
+    "static/css/main.417ed58f.chunk.css",
+    "static/js/main.dc4f3169.chunk.js"
+  ]
+}
