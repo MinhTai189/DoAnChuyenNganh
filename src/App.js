@@ -31,6 +31,7 @@ function App() {
   const handleChangeStateAccount = () => {
     firebaseAuth.onAuthStateChanged(user => {
       if (user) {
+        console.log(user);
         // lấy thông tin người dùng
         const data = {
           name: user.displayName,
