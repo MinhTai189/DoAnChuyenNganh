@@ -2,6 +2,7 @@
   "name": "doan-cn",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://minhtai189.github.io/doanchuyennganh",
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
@@ -13,6 +14,7 @@
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "firebase": "^8.3.2",
+    "gh-pages": "^3.1.0",
     "react": "^17.0.2",
     "react-beforeunload": "^2.4.0",
     "react-color": "^2.19.3",
@@ -29,7 +31,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
