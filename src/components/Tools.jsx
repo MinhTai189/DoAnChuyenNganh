@@ -301,17 +301,16 @@ const Tools = (props) => {
         <div className={classes.btnApp} onClick={() => setIsOpen(true)}>
           <Tooltip
             title={
-              isTopic ? (
-                <>
-                  <Typography>Tạo chủ đề</Typography>
-                  <p>Từ vựng phải được đặt trong một chủ đề</p>
-                </>
-              ) : (
-                <>
-                  <Typography>Tạo từ vựng</Typography>
-                  <p>Lưu từ vựng vào chủ đề</p>
-                </>
-              )
+              <>
+                <Typography>
+                  {isTopic ? "Tạo chủ đề" : "Tạo từ vựng"}
+                </Typography>
+                <p>
+                  {isTopic
+                    ? "Từ vựng phải được đặt trong một chủ đề"
+                    : "Lưu từ vựng vào chủ đề"}
+                </p>
+              </>
             }
           >
             <AddIcon />

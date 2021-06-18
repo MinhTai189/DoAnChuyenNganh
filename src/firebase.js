@@ -3,12 +3,12 @@ import 'firebase/auth'
 import 'firebase/firestore'
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCVhODuJBrpuGEkApf9f98LVZeIL9A2I78",
-    authDomain: "doanchuyennganh-088.firebaseapp.com",
-    projectId: "doanchuyennganh-088",
-    storageBucket: "doanchuyennganh-088.appspot.com",
-    messagingSenderId: "766382499192",
-    appId: "1:766382499192:web:f39054888229c7f6c8d48d"
+    apiKey: "AIzaSyBXF9B1a6Q-_st51CCi71TQVzXsRPTwQLY",
+    authDomain: "doan-088.firebaseapp.com",
+    projectId: "doan-088",
+    storageBucket: "doan-088.appspot.com",
+    messagingSenderId: "865287238755",
+    appId: "1:865287238755:web:d9ae1e6ad7e60b50e13456"
 };
 
 firebase.initializeApp(firebaseConfig);
